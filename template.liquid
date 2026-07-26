@@ -45,15 +45,15 @@
             }
           
 			td { 
-              vertical-align: middle; 
+              vertical-align: middle;
           	}
 			
+			td, th {
+				padding: 0;
+			}
+
 			.matrix {
               	border-collapse: collapse; 
-          	}
-          
-          	.matrix td {
-              	padding: 2px;
           	}
           
 			.matrix td:not(.team-header) {
@@ -155,24 +155,19 @@
               	border: solid .1rem white !important;
           	}
 
-          	.person_name {
+          	.person-name {
               	font-size: .9em;
-            	margin-top: .25em;
-              	margin-bottom: .25em;
-              	text-align: center;
+				padding: .4rem;
+				padding-left: .8rem;
+              	text-align: left;
+				display: flex;
+				align-items: center;
+				gap: .5rem;
           	}
           
-          	.person_name:not(:last-child)::after {
-              background-color: lightgrey;
-              bottom: -2;
-              content: '';
-              display: block;
-              height: 1px;
-              left: 50%;
-              position: relative;
-              transform: translate(-50%, 0);
-              width: 80%;
-          	}
+			.person-name:not(:last-child) {
+				border-bottom: .1rem solid lightgrey;
+			}
 
             .unconfirmed {
               color: #C69D2D;
@@ -180,7 +175,6 @@
 
             .icon-question {
               font-weight: bold;
-              margin-right: .25rem;
             }
 
             .declined {
@@ -189,7 +183,6 @@
 
             .icon-x {
               font-weight: bold;
-              margin-right: .25rem;
             }
         </style>
     </head>
@@ -279,10 +272,10 @@
 											<td class="people">
 												{% for plan_person in plan.plan_people_not_declined %}
 													{% if plan_person.position == position.name and plan_person.category.name == category.name %}
-														<div class="person_name {% if plan_person.status == "U"%}unconfirmed{% endif %}{% if plan_person.status == "D" %} declined{% endif %}">
-                                                          {% if plan_person.status == "U"%}&nbsp;<span class="icon-question">?</span>{% endif %}
-                                                          {% if plan_person.status == "D"%}&nbsp;<span class="icon-x">x</span>{% endif %}
-                                                          {{ plan_person.person.name }}
+														<div class="person-name {% if plan_person.status == "U"%}unconfirmed{% endif %}{% if plan_person.status == "D" %} declined{% endif %}">
+															{{ plan_person.person.name }}
+                                                          	{% if plan_person.status == "U"%}<span class="icon-question">?</span>{% endif %}
+                                                          	{% if plan_person.status == "D"%}<span class="icon-x">x</span>{% endif %}
                                                         </div>
                                               		{% endif %}
 												{% endfor %}
