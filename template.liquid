@@ -31,269 +31,295 @@
 -->
 
 <html>
-	<head>
-		<title>Plans Report</title>
-		<style>
-			* { 
-            	font-family: system-ui, Arial; 
-              	font-size: 10pt; 
-          	}
-          
-			body { 
-              padding:0; 
-              margin:0; 
-            }
-          
-			td { 
-              vertical-align: middle;
-          	}
-			
-			td, th {
-				padding: 0;
-			}
 
-			.matrix {
-              	border-collapse: collapse; 
-          	}
-          
-			.matrix td:not(.team-header) {
-            	border: solid 1px lightgrey; 
-          	}
-			
-          	.table-header { 
-              	text-align: center; 
-              	background-color: #204D74; 
-              	color: white;
-              	font-weight: normal;
-              	vertical-align: top; 
-              	padding-top: .5rem;
-          	}
-          
-          	.positions-header {
-              width: 15%;
-          	}
-          
-          	.logo {
-              margin-top: .25rem;
-          	}
-          
-          	.week-header {
-              width: 10%;
-              border-left: solid .025rem white !important;
-              border-right: solid .025rem white !important;
-          	}
-          
-          	.week-header-interior {
-              display: flex; 
-              align-items: center; 
-              flex-direction: column;
-              justify-content: space-between;
-          	}
-          
-          	.day-of-week {
-              font-weight: bold;
-              font-size: 11pt;
-          	}
-          
-			.series-title { 
-              font-size: 7pt; 
-              font-style: italic;
-              text-align: center;
-          	}
-          
-			.plan-title { 
-              font-size: 8pt; 
-              text-align: center;
-          	}
+<head>
+	<title>Plans Report</title>
+	<style>
+		:root {
+			--declined: rgb(178, 76, 56);
+			--unconfirmed: #C69D2D;
+		}
 
-          	.plan-name-container:has(.series-title:not(:empty)),
-          	.plan-name-container:has(.plan-title:not(:empty)) {
-              display: flex;
-              flex-direction: column;
-              justify-content: end;
-              gap: .25rem;
-              margin-top: .5rem;
-              margin-bottom: .5rem;
-              padding-top: .4rem;
-              width: 80%;
-              border-top: white solid .1rem;
-          	}
-          
-          	.team-header { 
-            	background-color: #c68a2a; 
-              	color: white; 
-              	font-weight: bold; 
-              	font-size: 10pt; 
-          	}
+		* {
+			font-family: system-ui, Arial;
+			font-size: 10pt;
+		}
 
-			.item { 
-              border-bottom: dotted 1px #999; 
-          	}
-          
-			.header { 
-            	font-weight: bold; 
-            	border-bottom: solid 1px black; 
-          	}
-          	
-          	.team-header-row {
-				break-after: avoid;
-          	}
-          
-          	.position-row {
-              break-inside: avoid;
-          	}
-          
-			.row-header {
-              background-color: #f5d19f;
-              border: solid .1rem white !important;
-              padding-left: 1rem !important;
-              padding-right: 1rem !important;
-          	}
-			
-          	.people:not(:has(*)) {
-            	background-color: lightgrey;
-              	border: solid .1rem white !important;
-          	}
+		body {
+			padding: 0;
+			margin: 0;
+		}
 
-          	.person-name {
-              	font-size: .9em;
-				padding: .4rem;
-				padding-left: .8rem;
-              	text-align: left;
-				display: flex;
-				align-items: center;
-				gap: .5rem;
-          	}
-          
-			.person-name:not(:last-child) {
-				border-bottom: .1rem solid lightgrey;
-			}
+		td {
+			vertical-align: middle;
+		}
 
-            .unconfirmed {
-              color: #C69D2D;
-            }
+		td,
+		th {
+			padding: 0;
+		}
 
-            .icon-question {
-              font-weight: bold;
-            }
+		.matrix {
+			border-collapse: collapse;
+		}
 
-            .declined {
-              color: rgb(178, 76, 56);
-            }
+		.matrix td:not(.team-header) {
+			border: solid 1px lightgrey;
+		}
 
-            .icon-x {
-              font-weight: bold;
-            }
-        </style>
-    </head>
+		.table-header {
+			text-align: center;
+			background-color: #204D74;
+			color: white;
+			font-weight: normal;
+			vertical-align: top;
+			padding-top: .5rem;
+		}
 
-    <body>
-		<table width="100%" class="matrix">
-			<!-- PLAN DATES -->
-			<thead>
-              <tr>
-                	<!-- Corner logo -->
-					<th class="table-header positions-header">
-                		<svg class="logo" width="3rem" height="3rem" viewBox="0 0 244 170" version="1.1"
-                          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                          xml:space="preserve" xmlns:serif="http://www.serif.com/"
-                          style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+		.positions-header {
+			width: 15%;
+		}
 
-                          <style>
-                              #g {
-                                  fill: white;
-                              }
+		.logo {
+			margin-top: .25rem;
+		}
 
-                              #n {
-                                  fill: white;
-                              }
-                          </style>
+		.week-header {
+			width: 10%;
+			border-left: solid .025rem white !important;
+			border-right: solid .025rem white !important;
+		}
 
-                          <rect id="lettermark" x="-78.384" y="-115.088" width="400" height="400" style="fill:none;"/>
+		.week-header-interior {
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+			justify-content: space-between;
+		}
 
-                          <g>
-                              <path id="g" d="M62.608,125.216c15.913,0 30.522,-6 41.478,-15.652c-3.913,38.609 -48.521,51.652 -73.565,23.739c-2.869,-3.13 -4.434,-5.739 -6.26,-8.608c-0.522,-0.783 -1.044,-1.044 -1.826,-0.261l-14.087,13.565c-0.522,0.522 -0.522,1.043 -0,1.826c12.782,18.782 32.869,30 53.999,30c32.087,-0 63.13,-26.087 63.13,-62.869l0,-100.173c0,-0.783 -0.521,-1.305 -1.304,-1.305l-18.522,0c-0.782,0 -1.304,0.522 -1.304,1.305l-0,9.13c-10.956,-9.913 -25.565,-15.913 -41.739,-15.913c-34.695,0 -62.608,27.913 -62.608,62.608c0,34.696 27.913,62.608 62.608,62.608Zm0,-20.086c-23.478,-0 -41.478,-19.044 -41.478,-42.522c0,-23.478 18,-41.478 41.478,-41.478c23.478,0 41.478,18 41.478,41.478c0,23.478 -18,42.522 -41.478,42.522Z" style="fill-rule:nonzero;"/>
+		.day-of-week {
+			font-weight: bold;
+			font-size: 11pt;
+		}
 
-                              <path id="n" d="M161.177,118.626l0,-67.042c0,-6.73 2.589,-11.907 3.883,-13.978c14.495,-24.85 44.522,-18.12 54.358,1.035c1.295,2.589 2.848,7.507 2.848,14.496l-0,65.489c-0,0.777 0.517,1.294 1.294,1.294l18.378,0c0.777,0 1.295,-0.517 1.295,-1.294l-0,-67.301c-0,-5.695 -1.036,-11.907 -2.33,-15.531c-14.496,-40.381 -60.053,-42.452 -79.726,-24.85l0,-3.882c0,-0.777 -0.518,-1.295 -1.294,-1.295l-18.379,0c-0.776,0 -1.294,0.518 -1.294,1.295l0,111.564c0,0.777 0.518,1.294 1.294,1.294l18.379,0c0.776,0 1.294,-0.517 1.294,-1.294Z" style="fill-rule:nonzero;"/>
+		.series-title {
+			font-size: 7pt;
+			font-style: italic;
+			text-align: center;
+		}
 
-                          </g>
+		.plan-title {
+			font-size: 8pt;
+			text-align: center;
+		}
 
-                      </svg>
-                	</th>
-					{% for plan in plans %}
-						<th class="table-header week-header">
-                          <div class="week-header-interior">
-                            <div>
-                              <div class="day-of-week">{{ plan.ministry.name }}</div>
+		.plan-name-container:has(.series-title:not(:empty)),
+		.plan-name-container:has(.plan-title:not(:empty)) {
+			display: flex;
+			flex-direction: column;
+			justify-content: end;
+			gap: .25rem;
+			margin-top: .5rem;
+			margin-bottom: .5rem;
+			padding-top: .4rem;
+			width: 80%;
+			border-top: white solid .1rem;
+		}
 
-                              {% assign pos = plan.dates | size | minus: 6 %}
-                              {% assign last_char = plan.dates | slice: pos, 6 %}
-                              {% assign trimmedDate = plan.dates | slice: 0, pos %}
-                              {{ trimmedDate }}
-                            </div>
+		.team-header {
+			background-color: #c68a2a;
+			color: white;
+			font-weight: bold;
+			font-size: 10pt;
+		}
 
-                            <div class="plan-name-container">
-                              <div class="series-title">{{ plan.series_title }}</div>
-                              <div class="plan-title">{{ plan.plan_title }}</div>
-                            </div>
-                          </div>
-              			</th>
-						{% assign number_of_columns = forloop.index %}
-					{% endfor %}
-				</tr>
-          	</thead>
-			<!-- END PLAN DATES -->
+		.item {
+			border-bottom: dotted 1px #999;
+		}
 
-			<!-- PEOPLE -->
-			{% if print_people == true %}
-	
-				{% if all_people_categories == true %}
-					{% assign selected_people_categories = category_with_positions %}
-				{% else %}
-					{% assign selected_people_categories = my_people_categories %}
+		.header {
+			font-weight: bold;
+			border-bottom: solid 1px black;
+		}
+
+		.team-header-row {
+			break-after: avoid;
+		}
+
+		.position-row {
+			break-inside: avoid;
+		}
+
+		.row-header {
+			background-color: #f5d19f;
+			border: solid .1rem white !important;
+			padding-left: 1rem !important;
+			padding-right: 1rem !important;
+		}
+
+		.people:not(:has(*)) {
+			background-color: lightgrey;
+			border: solid .1rem white !important;
+		}
+
+		.person-name {
+			font-size: .9em;
+			padding: .4rem;
+			padding-inline: .8rem;
+			text-align: left;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: .5rem;
+		}
+
+		.person-name:not(:last-child) {
+			border-bottom: .1rem dashed lightgrey;
+		}
+
+		.unconfirmed {
+			color: var(--unconfirmed);
+		}
+
+		.declined {
+			color: var(--declined);
+		}
+
+		.icon {
+			font-weight: bold;
+			border-radius: 50%;
+			height: 1.25em;
+			width: 1.25em;
+			text-align: center;
+			/* align-content: center; */
+			color: white;
+			flex-shrink: 0;
+			font-weight: bold;
+		}
+
+		.icon-question {
+			background-color: var(--unconfirmed);
+		}
+
+		.icon-x {
+			background-color: var(--declined);
+		}
+	</style>
+</head>
+
+<body>
+	<table width="100%" class="matrix">
+		<!-- PLAN DATES -->
+		<thead>
+			<tr>
+				<!-- Corner logo -->
+				<th class="table-header positions-header">
+					<svg class="logo" width="3rem" height="3rem" viewBox="0 0 244 170" version="1.1"
+						xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+						xml:space="preserve" xmlns:serif="http://www.serif.com/"
+						style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+
+						<style>
+							#g {
+								fill: white;
+							}
+
+							#n {
+								fill: white;
+							}
+						</style>
+
+						<rect id="lettermark" x="-78.384" y="-115.088" width="400" height="400" style="fill:none;" />
+
+						<g>
+							<path id="g"
+								d="M62.608,125.216c15.913,0 30.522,-6 41.478,-15.652c-3.913,38.609 -48.521,51.652 -73.565,23.739c-2.869,-3.13 -4.434,-5.739 -6.26,-8.608c-0.522,-0.783 -1.044,-1.044 -1.826,-0.261l-14.087,13.565c-0.522,0.522 -0.522,1.043 -0,1.826c12.782,18.782 32.869,30 53.999,30c32.087,-0 63.13,-26.087 63.13,-62.869l0,-100.173c0,-0.783 -0.521,-1.305 -1.304,-1.305l-18.522,0c-0.782,0 -1.304,0.522 -1.304,1.305l-0,9.13c-10.956,-9.913 -25.565,-15.913 -41.739,-15.913c-34.695,0 -62.608,27.913 -62.608,62.608c0,34.696 27.913,62.608 62.608,62.608Zm0,-20.086c-23.478,-0 -41.478,-19.044 -41.478,-42.522c0,-23.478 18,-41.478 41.478,-41.478c23.478,0 41.478,18 41.478,41.478c0,23.478 -18,42.522 -41.478,42.522Z"
+								style="fill-rule:nonzero;" />
+
+							<path id="n"
+								d="M161.177,118.626l0,-67.042c0,-6.73 2.589,-11.907 3.883,-13.978c14.495,-24.85 44.522,-18.12 54.358,1.035c1.295,2.589 2.848,7.507 2.848,14.496l-0,65.489c-0,0.777 0.517,1.294 1.294,1.294l18.378,0c0.777,0 1.295,-0.517 1.295,-1.294l-0,-67.301c-0,-5.695 -1.036,-11.907 -2.33,-15.531c-14.496,-40.381 -60.053,-42.452 -79.726,-24.85l0,-3.882c0,-0.777 -0.518,-1.295 -1.294,-1.295l-18.379,0c-0.776,0 -1.294,0.518 -1.294,1.295l0,111.564c0,0.777 0.518,1.294 1.294,1.294l18.379,0c0.776,0 1.294,-0.517 1.294,-1.294Z"
+								style="fill-rule:nonzero;" />
+
+						</g>
+
+					</svg>
+				</th>
+				{% for plan in plans %}
+				<th class="table-header week-header">
+					<div class="week-header-interior">
+						<div>
+							<div class="day-of-week">{{ plan.ministry.name }}</div>
+
+							{% assign pos = plan.dates | size | minus: 6 %}
+							{% assign last_char = plan.dates | slice: pos, 6 %}
+							{% assign trimmedDate = plan.dates | slice: 0, pos %}
+							{{ trimmedDate }}
+						</div>
+
+						<div class="plan-name-container">
+							<div class="series-title">{{ plan.series_title }}</div>
+							<div class="plan-title">{{ plan.plan_title }}</div>
+						</div>
+					</div>
+				</th>
+				{% assign number_of_columns = forloop.index %}
+				{% endfor %}
+			</tr>
+		</thead>
+		<!-- END PLAN DATES -->
+
+		<!-- PEOPLE -->
+		{% if print_people == true %}
+
+		{% if all_people_categories == true %}
+		{% assign selected_people_categories = category_with_positions %}
+		{% else %}
+		{% assign selected_people_categories = my_people_categories %}
+		{% endif %}
+
+		{% for selected_category in selected_people_categories %}
+		{% for category in category_with_positions %}
+
+		{% if category.name == selected_category or category.name == selected_category.name %}
+
+		{% if show_open_only == true and category.opened == false %}
+		{% else %}
+		<tr class="team-header-row">
+			<td class="team-header">{{ category.name }}</td>
+			<td class="team-header" colspan="{{ number_of_columns }}"></td>
+		</tr>
+
+		{% for position in category.positions %}
+		<tr class="position-row">
+			<td class="row-header">{{ position.name }}</td>
+			{% for plan in plans %}
+			<td class="people">
+				{% for plan_person in plan.plan_people_not_declined %}
+				{% if plan_person.position == position.name and plan_person.category.name == category.name %}
+				<div class="person-name {% if plan_person.status == "U"%}unconfirmed{% endif %}{% if
+					plan_person.status == "D" %} declined{% endif %}">
+					{{ plan_person.person.name }}
+					{% if plan_person.status == "U"%}<span class="icon icon-question">?</span>{% endif %}
+					{% if plan_person.status == "D"%}<span class="icon icon-x">×</span>{% endif %}
+				</div>
 				{% endif %}
-	
-				{% for selected_category in selected_people_categories %}
-					{% for category in category_with_positions %}
-					
-						{% if category.name == selected_category or category.name == selected_category.name %}
-								
-							{% if show_open_only == true and category.opened == false  %}
-							{% else %}
-								<tr class="team-header-row">
-									<td class="team-header">{{ category.name }}</td>
-									<td class="team-header" colspan="{{ number_of_columns }}"></td>
-								</tr>
-					
-								{% for position in category.positions %}
-									<tr class="position-row">
-										<td class="row-header">{{ position.name }}</td>
-										{% for plan in plans %}
-											<td class="people">
-												{% for plan_person in plan.plan_people_not_declined %}
-													{% if plan_person.position == position.name and plan_person.category.name == category.name %}
-														<div class="person-name {% if plan_person.status == "U"%}unconfirmed{% endif %}{% if plan_person.status == "D" %} declined{% endif %}">
-															{{ plan_person.person.name }}
-                                                          	{% if plan_person.status == "U"%}<span class="icon-question">?</span>{% endif %}
-                                                          	{% if plan_person.status == "D"%}<span class="icon-x">x</span>{% endif %}
-                                                        </div>
-                                              		{% endif %}
-												{% endfor %}
-											</td>
-										{% endfor %}
-									</tr>
-								{% endfor %}
-								
-							{% endif %}	
-											
-						{% endif %}
-						
-					{% endfor %}	
-				{% endfor %}	
-			{% endif %}
-			<!-- END PEOPLE -->
+				{% endfor %}
+			</td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+
+		{% endif %}
+
+		{% endif %}
+
+		{% endfor %}
+		{% endfor %}
+		{% endif %}
+		<!-- END PEOPLE -->
 
 
-		</table>
-	</body>
+	</table>
+</body>
+
 </html>
