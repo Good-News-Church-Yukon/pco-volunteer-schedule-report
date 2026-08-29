@@ -38,6 +38,7 @@
 		:root {
 			--declined: rgb(178, 76, 56);
 			--unconfirmed: #C69D2D;
+			--left-indent: .75rem;
 		}
 
 		* {
@@ -54,6 +55,10 @@
 			vertical-align: middle;
 		}
 
+		.accent-week {
+			background-color: hsl(0, 0%, 92%);
+		}
+
 		td,
 		th {
 			padding: 0;
@@ -61,6 +66,8 @@
 
 		.matrix {
 			border-collapse: collapse;
+			table-layout: fixed;
+			width: 100%;
 		}
 
 		.matrix td:not(.team-header) {
@@ -77,7 +84,7 @@
 		}
 
 		.positions-header {
-			width: 15%;
+			width: 10rem;
 		}
 
 		.logo {
@@ -85,7 +92,7 @@
 		}
 
 		.week-header {
-			width: 10%;
+			width: auto;
 			border-left: solid .025rem white !important;
 			border-right: solid .025rem white !important;
 		}
@@ -130,7 +137,9 @@
 			background-color: #c68a2a;
 			color: white;
 			font-weight: bold;
-			font-size: 10pt;
+			font-size: 1rem;
+			height: 2rem;
+			padding-left: var(--left-indent);
 		}
 
 		.item {
@@ -153,13 +162,8 @@
 		.row-header {
 			background-color: #f5d19f;
 			border: solid .1rem white !important;
-			padding-left: 1rem !important;
+			padding-left: var(--left-indent);
 			padding-right: 1rem !important;
-		}
-
-		.people:not(:has(*)) {
-			background-color: lightgrey;
-			border: solid .1rem white !important;
 		}
 
 		.person-name {
@@ -171,6 +175,12 @@
 			align-items: center;
 			justify-content: space-between;
 			gap: .5rem;
+		}
+
+		.empty-position {
+			text-align: center;
+			color: hsl(0, 0%, 60%);
+			font-size: .75rem;
 		}
 
 		.person-name:not(:last-child) {
@@ -188,10 +198,10 @@
 		.icon {
 			font-weight: bold;
 			border-radius: 50%;
-			height: 1.25em;
-			width: 1.25em;
+			height: 1rem;
+			width: 1rem;
+			font-size: .75rem;
 			text-align: center;
-			/* align-content: center; */
 			color: white;
 			flex-shrink: 0;
 			font-weight: bold;
@@ -285,25 +295,37 @@
 		{% if show_open_only == true and category.opened == false %}
 		{% else %}
 		<tr class="team-header-row">
-			<td class="team-header">{{ category.name }}</td>
-			<td class="team-header" colspan="{{ number_of_columns }}"></td>
+			<td class="team-header" colspan="{{ number_of_columns | plus: 1 }}">{{ category.name }}</td>
 		</tr>
 
 		{% for position in category.positions %}
 		<tr class="position-row">
 			<td class="row-header">{{ position.name }}</td>
 			{% for plan in plans %}
-			<td class="people">
-				{% for plan_person in plan.plan_people_not_declined %}
+
+			{% assign has_person = false %}
+
+			{% for plan_person in plan.plan_people_not_declined %}
 				{% if plan_person.position == position.name and plan_person.category.name == category.name %}
-				<div class="person-name {% if plan_person.status == "U"%}unconfirmed{% endif %}{% if
-					plan_person.status == "D" %} declined{% endif %}">
-					{{ plan_person.person.name }}
-					{% if plan_person.status == "U"%}<span class="icon icon-question">?</span>{% endif %}
-					{% if plan_person.status == "D"%}<span class="icon icon-x">×</span>{% endif %}
-				</div>
+					{% assign has_person = true %}
 				{% endif %}
-				{% endfor %}
+			{% endfor %}
+
+			<td class="people {% if plan.ministry.name == "Wednesday"%}accent-week{% endif %}">
+				{% if has_person %}
+					{% for plan_person in plan.plan_people_not_declined %}
+						{% if plan_person.position == position.name and plan_person.category.name == category.name %}
+							<div class="person-name {% if plan_person.status == "U"%}unconfirmed{% endif %}{% if
+								plan_person.status == "D" %} declined{% endif %}">
+								{{ plan_person.person.name }}
+								{% if plan_person.status == "U"%}<span class="icon icon-question">?</span>{% endif %}
+								{% if plan_person.status == "D"%}<span class="icon icon-x">×</span>{% endif %}
+							</div>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<div class="empty-position">───</div>
+				{% endif %}
 			</td>
 			{% endfor %}
 		</tr>
@@ -317,8 +339,6 @@
 		{% endfor %}
 		{% endif %}
 		<!-- END PEOPLE -->
-
-
 	</table>
 </body>
 
