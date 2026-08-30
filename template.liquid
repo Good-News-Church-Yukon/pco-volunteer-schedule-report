@@ -36,9 +36,13 @@
 	<title>Plans Report</title>
 	<style>
 		:root {
-			--declined: rgb(178, 76, 56);
-			--unconfirmed: #C69D2D;
+			--declined: hsl(10, 52%, 46%);
+			--unconfirmed: hsl(44, 63%, 48%);
 			--left-indent: .75rem;
+			--primary-color: hsl(208, 57%, 29%);
+			--primary-color-accent: hsl(208, 57%, 60%);
+			--secondary-color: hsl(44, 63%, 48%);
+			--secondary-color-accent: hsl(35, 81%, 79%);
 		}
 
 		* {
@@ -71,12 +75,16 @@
 		}
 
 		.matrix td:not(.team-header) {
-			border: solid 1px lightgrey;
+			border: solid 1px hsl(0, 0%, 83%);
 		}
 
+		.logo-container {
+			align-content: center;
+		}
+	
 		.table-header {
 			text-align: center;
-			background-color: #204D74;
+			background-color: var(--primary-color);
 			color: white;
 			font-weight: normal;
 			vertical-align: top;
@@ -87,14 +95,10 @@
 			width: 10rem;
 		}
 
-		.logo {
-			margin-top: .25rem;
-		}
-
 		.week-header {
 			width: auto;
-			border-left: solid .025rem white !important;
-			border-right: solid .025rem white !important;
+			border-left: solid .025rem var(--primary-color-accent) !important;
+			border-right: solid .025rem var(--primary-color-accent) !important;
 		}
 
 		.week-header-interior {
@@ -104,9 +108,13 @@
 			justify-content: space-between;
 		}
 
-		.day-of-week {
+		.service-title {
 			font-weight: bold;
-			font-size: 11pt;
+			font-size: .9rem;
+		}
+
+		.service-subtitle {
+			font-size: .85rem;
 		}
 
 		.series-title {
@@ -134,7 +142,8 @@
 		}
 
 		.team-header {
-			background-color: #c68a2a;
+			background-color: var(--secondary-color);
+			border: solid .1rem var(--secondary-color) !important;
 			color: white;
 			font-weight: bold;
 			font-size: 1rem;
@@ -143,7 +152,7 @@
 		}
 
 		.item {
-			border-bottom: dotted 1px #999;
+			border-bottom: dotted 1px hsl(0, 0%, 83%);
 		}
 
 		.header {
@@ -160,8 +169,8 @@
 		}
 
 		.row-header {
-			background-color: #f5d19f;
-			border: solid .1rem white !important;
+			background-color: var(--secondary-color-accent);
+			border: solid .1rem var(--secondary-color) !important;
 			padding-left: var(--left-indent);
 			padding-right: 1rem !important;
 		}
@@ -184,7 +193,7 @@
 		}
 
 		.person-name:not(:last-child) {
-			border-bottom: .1rem dashed lightgrey;
+			border-bottom: .1rem dashed hsl(0, 0%, 83%);
 		}
 
 		.unconfirmed {
@@ -223,8 +232,8 @@
 		<thead>
 			<tr>
 				<!-- Corner logo -->
-				<th class="table-header positions-header">
-					<svg class="logo" width="3rem" height="3rem" viewBox="0 0 244 170" version="1.1"
+				<th class="table-header positions-header logo-container">
+					<svg width="3rem" height="3rem" viewBox="0 0 244 170" version="1.1"
 						xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 						xml:space="preserve" xmlns:serif="http://www.serif.com/"
 						style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
@@ -258,12 +267,12 @@
 				<th class="table-header week-header">
 					<div class="week-header-interior">
 						<div>
-							<div class="day-of-week">{{ plan.ministry.name }}</div>
-
 							{% assign pos = plan.dates | size | minus: 6 %}
 							{% assign last_char = plan.dates | slice: pos, 6 %}
 							{% assign trimmedDate = plan.dates | slice: 0, pos %}
-							{{ trimmedDate }}
+
+							<div class="service-title">{{ trimmedDate }}</div>
+							<div class="service-subtitle">{{ plan.ministry.name }}</div>
 						</div>
 
 						<div class="plan-name-container">
