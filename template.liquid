@@ -211,9 +211,9 @@
 			width: 1rem;
 			font-size: .75rem;
 			text-align: center;
+            align-content: center;
 			color: white;
 			flex-shrink: 0;
-			font-weight: bold;
 		}
 
 		.icon-question {
@@ -222,6 +222,8 @@
 
 		.icon-x {
 			background-color: var(--declined);
+            display: flex;
+            justify-content: center;
 		}
 	</style>
 </head>
@@ -322,15 +324,19 @@
 
 			<td class="people {% if plan.ministry.name == "Wednesday"%}accent-week{% endif %}">
 				{% if has_person %}
-					{% for plan_person in plan.plan_people_not_declined %}
-						{% if plan_person.position == position.name and plan_person.category.name == category.name %}
-							<div class="person-name {% if plan_person.status == "U"%}unconfirmed{% endif %}{% if
-								plan_person.status == "D" %} declined{% endif %}">
-								{{ plan_person.person.name }}
-								{% if plan_person.status == "U"%}<span class="icon icon-question">?</span>{% endif %}
-								{% if plan_person.status == "D"%}<span class="icon icon-x">×</span>{% endif %}
-							</div>
-						{% endif %}
+					{% assign statuses = "C,U,D" | split: "," %}
+
+					{% for status in statuses %}
+						{% for plan_person in plan.plan_people %}
+							{% if plan_person.position == position.name and plan_person.category.name == category.name and plan_person.status == status %}
+								<div class="person-name {% if plan_person.status == "U"%}unconfirmed{% endif %}{% if
+									plan_person.status == "D" %} declined{% endif %}">
+									{{ plan_person.person.name }}
+									{% if plan_person.status == "U"%}<span class="icon icon-question">?</span>{% endif %}
+									{% if plan_person.status == "D"%}<span class="icon icon-x">×</span>{% endif %}
+								</div>
+							{% endif %}
+						{% endfor %}
 					{% endfor %}
 				{% else %}
 					<div class="empty-position">───</div>
