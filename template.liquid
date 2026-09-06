@@ -7,7 +7,7 @@
 	SECTIONS TO PRINT (to ignore open/closed status and predefine which sections to print, please set show_open_only above to false, and then set these sections accordingly)
 		{% assign print_titles = true %}
 		{% assign print_plan_notes = false %}
-		{% assign print_order_of_service = true %}		
+		{% assign print_order_of_service = true %}
 		{% assign print_song_section = false %}
 		{% assign print_item_section = false %}
 		{% assign print_media_section = false %}
@@ -36,18 +36,30 @@
 	<title>Plans Report</title>
 	<style>
 		:root {
-			--declined: hsl(10, 52%, 46%);
-			--unconfirmed: hsl(44, 63%, 48%);
-			--left-indent: .75rem;
 			--primary-color: hsl(208, 57%, 29%);
-			--primary-color-accent: hsl(208, 57%, 60%);
+			--primary-color-accent: hsl(208, 57%, 45%);
 			--secondary-color: hsl(44, 63%, 48%);
 			--secondary-color-accent: hsl(35, 81%, 79%);
+			--neutral-color: hsl(0, 0%, 75%);
+			--neutral-color-accent: hsl(0, 0%, 93%);
+
+			--unconfirmed: hsl(44, 63%, 48%);
+			--declined: hsl(10, 52%, 46%);
+
+			--left-indent: .75rem;
+			--border-width: .05rem;
+			--gap: .5rem;
+
+			--font-x-small: .6rem;
+			--font-small: .7rem;
+			--font-regular: .8rem;
+			--font-large: .9rem;
+			--font-x-large: 1rem;
 		}
 
 		* {
 			font-family: system-ui, Arial;
-			font-size: 10pt;
+			font-size: var(--font-regular);
 		}
 
 		body {
@@ -55,17 +67,13 @@
 			margin: 0;
 		}
 
-		td {
-			vertical-align: middle;
-		}
-
-		.accent-week {
-			background-color: hsl(0, 0%, 92%);
-		}
-
 		td,
 		th {
 			padding: 0;
+		}
+
+		td {
+			vertical-align: middle;
 		}
 
 		.matrix {
@@ -75,20 +83,25 @@
 		}
 
 		.matrix td:not(.team-header) {
-			border: solid 1px hsl(0, 0%, 83%);
+			border: var(--border-width) solid var(--neutral-color);
 		}
 
 		.logo-container {
 			align-content: center;
+			border-left: var(--border-width) solid var(--primary-color);
 		}
-	
+
 		.table-header {
 			text-align: center;
 			background-color: var(--primary-color);
 			color: white;
 			font-weight: normal;
 			vertical-align: top;
-			padding-top: .5rem;
+			padding-top: var(--gap);
+		}
+
+		.accent-week {
+			background-color: var(--neutral-color-accent);
 		}
 
 		.positions-header {
@@ -97,8 +110,8 @@
 
 		.week-header {
 			width: auto;
-			border-left: solid .025rem var(--primary-color-accent) !important;
-			border-right: solid .025rem var(--primary-color-accent) !important;
+			border-left: var(--border-width) solid var(--primary-color-accent) !important;
+			border-right: var(--border-width) solid var(--primary-color-accent) !important;
 		}
 
 		.week-header-interior {
@@ -110,22 +123,22 @@
 
 		.service-title {
 			font-weight: bold;
-			font-size: .9rem;
+			font-size: var(--font-x-large);
 		}
 
 		.service-subtitle {
-			font-size: .85rem;
+			font-size: var(--font-large);
 		}
 
 		.series-title {
-			font-size: 7pt;
-			font-style: italic;
+			font-size: var(--font-small);
 			text-align: center;
 		}
 
 		.plan-title {
-			font-size: 8pt;
+			font-size: var(--font-x-small);
 			text-align: center;
+			font-style: italic;
 		}
 
 		.plan-name-container:has(.series-title:not(:empty)),
@@ -134,30 +147,21 @@
 			flex-direction: column;
 			justify-content: end;
 			gap: .25rem;
-			margin-top: .5rem;
-			margin-bottom: .5rem;
+			margin-top: var(--gap);
+			margin-bottom: var(--gap);
 			padding-top: .4rem;
 			width: 80%;
-			border-top: white solid .1rem;
+			border-top: var(--border-width) solid white;
 		}
 
 		.team-header {
 			background-color: var(--secondary-color);
-			border: solid .1rem var(--secondary-color) !important;
+			border: var(--border-width) solid var(--secondary-color) !important;
 			color: white;
 			font-weight: bold;
-			font-size: 1rem;
+			font-size: var(--font-x-large);
 			height: 2rem;
 			padding-left: var(--left-indent);
-		}
-
-		.item {
-			border-bottom: dotted 1px hsl(0, 0%, 83%);
-		}
-
-		.header {
-			font-weight: bold;
-			border-bottom: solid 1px black;
 		}
 
 		.team-header-row {
@@ -169,31 +173,32 @@
 		}
 
 		.row-header {
+			font-size: var(--font-large);
 			background-color: var(--secondary-color-accent);
-			border: solid .1rem var(--secondary-color) !important;
+			border: var(--border-width) solid var(--secondary-color) !important;
 			padding-left: var(--left-indent);
 			padding-right: 1rem !important;
+			padding-block: var(--gap);
 		}
 
 		.person-name {
-			font-size: .9em;
-			padding: .4rem;
+			padding: var(--gap);
 			padding-inline: .8rem;
 			text-align: left;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			gap: .5rem;
+			gap: var(--gap);
 		}
 
 		.empty-position {
 			text-align: center;
 			color: hsl(0, 0%, 60%);
-			font-size: .75rem;
+			font-size: var(--font-small);
 		}
 
 		.person-name:not(:last-child) {
-			border-bottom: .1rem dashed hsl(0, 0%, 83%);
+			border-bottom: var(--border-width) dashed var(--neutral-color);
 		}
 
 		.unconfirmed {
@@ -209,7 +214,7 @@
 			border-radius: 50%;
 			height: 1rem;
 			width: 1rem;
-			font-size: .75rem;
+			font-size: var(--font-x-small);
 			text-align: center;
             align-content: center;
 			color: white;
@@ -224,6 +229,7 @@
 			background-color: var(--declined);
             display: flex;
             justify-content: center;
+			flex-wrap: wrap;
 		}
 	</style>
 </head>
