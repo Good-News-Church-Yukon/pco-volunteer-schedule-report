@@ -50,6 +50,8 @@
 			--border-width: .05rem;
 			--gap: .5rem;
 
+			--font-color-contrast: white;
+			
 			--font-x-small: .6rem;
 			--font-small: .7rem;
 			--font-regular: .8rem;
@@ -94,10 +96,10 @@
 		.table-header {
 			text-align: center;
 			background-color: var(--primary-color);
-			color: white;
+			color: var(--font-color-contrast);
 			font-weight: normal;
 			vertical-align: top;
-			padding-top: var(--gap);
+			padding-block: var(--gap);
 		}
 
 		.accent-week {
@@ -119,6 +121,7 @@
 			align-items: center;
 			flex-direction: column;
 			justify-content: space-between;
+			gap: calc(var(--gap) / 2);
 		}
 
 		.service-title {
@@ -146,18 +149,16 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: end;
-			gap: .25rem;
-			margin-top: var(--gap);
-			margin-bottom: var(--gap);
-			padding-top: .4rem;
-			width: 80%;
-			border-top: var(--border-width) solid white;
+			gap: calc(var(--gap) / 2);
+			width: 70%;
+			border-top: var(--border-width) solid var(--primary-color-accent);
+			padding-top: calc(var(--gap) / 2);
 		}
 
 		.team-header {
 			background-color: var(--secondary-color);
 			border: var(--border-width) solid var(--secondary-color) !important;
-			color: white;
+			color: var(--font-color-contrast);
 			font-weight: bold;
 			font-size: var(--font-x-large);
 			height: 2rem;
@@ -193,7 +194,7 @@
 
 		.empty-position {
 			text-align: center;
-			color: hsl(0, 0%, 60%);
+			color: var(--neutral-color);
 			font-size: var(--font-small);
 		}
 
@@ -217,7 +218,7 @@
 			font-size: var(--font-x-small);
 			text-align: center;
             align-content: center;
-			color: white;
+			color: var(--font-color-contrast);
 			flex-shrink: 0;
 		}
 
@@ -247,12 +248,8 @@
 						style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
 
 						<style>
-							#g {
-								fill: white;
-							}
-
-							#n {
-								fill: white;
+							#g, #n {
+								fill: var(--font-color-contrast);
 							}
 						</style>
 
@@ -274,19 +271,19 @@
 				{% for plan in plans %}
 				<th class="table-header week-header">
 					<div class="week-header-interior">
-						<div>
-							{% assign pos = plan.dates | size | minus: 6 %}
-							{% assign last_char = plan.dates | slice: pos, 6 %}
-							{% assign trimmedDate = plan.dates | slice: 0, pos %}
+						{% assign pos = plan.dates | size | minus: 6 %}
+						{% assign last_char = plan.dates | slice: pos, 6 %}
+						{% assign trimmedDate = plan.dates | slice: 0, pos %}
 
-							<div class="service-title">{{ trimmedDate }}</div>
-							<div class="service-subtitle">{{ plan.ministry.name }}</div>
-						</div>
+						<div class="service-title">{{ trimmedDate }}</div>
+						<div class="service-subtitle">{{ plan.ministry.name }}</div>
 
-						<div class="plan-name-container">
-							<div class="series-title">{{ plan.series_title }}</div>
-							<div class="plan-title">{{ plan.plan_title }}</div>
-						</div>
+						{% if plan.series_title != blank or plan.plan_title != blank %}
+							<div class="plan-name-container">
+								{% if plan.series_title != blank %}<div class="series-title">{{ plan.series_title }}</div>{% endif %}
+								{% if plan.plan_title != blank %}<div class="plan-title">{{ plan.plan_title }}</div>{% endif %}
+							</div>
+						{% endif %}
 					</div>
 				</th>
 				{% assign number_of_columns = forloop.index %}
